@@ -346,15 +346,78 @@
     
     <section class="project-overview">
         <h2>Project Overview</h2>
-        <p>The main goal of this project was to utilize an analogue component with an embedded component to create a system that functionally produces and processes audio signals for musical applications. Our system integrates the envelope components of the synthesizer with the touch pads of the drum set to create a model of a DJ set that allows for real-time sound creation and manipulation. This project demonstrates the use of practical applications in circuit design as well as developing and processing audio signals for output, combining analog signal conditioning with digital control systems.</p>
+        <p>The main goal of this project was to utilize an analogue 
+            component with an embedded component to create a system that 
+            functionally produces and processes audio signals for musical applications. 
+            Our system integrates the envelope components of the synthesizer 
+            with the touch pads of the drum set to create a model of a DJ set that 
+            allows for real-time sound creation and manipulation. This project 
+            demonstrates the use of practical applications in circuit design as well
+             as developing and processing audio signals for output, combining analog 
+             signal conditioning with digital control systems.</p>
     </section>
 
     <section class="How-Do-The-Components-Work?">
         <h2>How Do The Components Work?</h2>
-        <img src="imgs/markup_keyb_synth.jpeg" alt="Featured image" class="featured-image">
-        <p>The Keyboard Synthesizer consists of</p>
+        <img src="imgs\markup_keyb_synth.jpg" alt="labelled imge" class="labelled-image" width="500" height="350">
+        <p>The DJ set consists of these components:</p>
+        <li>Keyboard Synthesizer featuring an ADSR (Attack, Decay, Sustain, Release) 
+            envelope controller, a 12-key numeric keypad interface, operational amplifier 
+            circuitry for signal conditioning, a Digital-to-Analog Converter (DAC) for
+             waveform generation, and an Arduino microcontroller for processing and control.</li>
+        
+        <li>GUI features a real-time oscilloscope to vizualize the audio waveform, drum and
+             synthesizer screens, percentage bars for amplitude monitoring, and song screen 
+             to view the selected song from a list of preloaded audio sounds</li>
+        <li>Drum Set Includes....Are we going to have this?</li>
     </section>
     
+    <section id="building-hardware">
+        <h2>Building the Hardware</h2>
+        <p>Our DJ table consists of three main hardware components working together to
+             create a complete music production system. Below is a break down each component
+              with detailed information on how they were constructed and integrated.</p>
+        
+        <div class="component-section">
+            <h3>The Drum Set</h3>
+            <p>The drum machine component allows for creating rhythm patterns with bass, snare, and hi-hat sounds.</p>
+            
+            <!-- Drum set description content here -->
+            
+            <div class="schematic-container">
+                <h4>Drum Set Circuit Schematic</h4>
+                <!-- Insert drum set circuit schematic image here -->
+                <img src="images/drum-circuit-schematic.png" alt="Drum Set Circuit Schematic" class="schematic-image">
+            </div>
+        </div>
+        
+        <div class="component-section">
+            <h3>The Synthesizer</h3>
+            <p>Our synthesizer features a complete ADSR (Attack, Decay, Sustain, Release) envelope controller for shaping sound characteristics.</p>
+            
+            <!-- Synthesizer description content here -->
+            
+            <div class="schematic-container">
+                <h4>Synthesizer Circuit Schematic</h4>
+                <!-- Insert synthesizer circuit schematic image here -->
+                <img src="images/synth-circuit-schematic.png" alt="Synthesizer Circuit Schematic" class="schematic-image">
+            </div>
+        </div>
+        
+        <div class="component-section">
+            <h3>The GUI</h3>
+            <p>The graphical user interface provides visual feedback and control over all aspects of the DJ table system.</p>
+            
+            <!-- GUI description content here -->
+            
+            <div class="schematic-container">
+                <h4>GUI Connection Diagram</h4>
+                <!-- Insert GUI connection diagram here -->
+                <img src="images/gui-connection-diagram.png" alt="GUI Connection Diagram" class="schematic-image">
+            </div>
+        </div>
+    </section>
+
     <section class="methodology">
         <h2>My Approach</h2>
         <p>To complete this project, I followed these steps:</p>
