@@ -123,6 +123,35 @@
             color: #7f8c8d;
             font-size: 0.9em;
         }
+
+        .components-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0 30px 0;
+        }
+
+        .components-table th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .components-table td {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        .components-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .components-table tr:hover {
+            background-color: #e9f7fe;
+        }
     </style>
 </head>
 <body>
@@ -143,11 +172,176 @@
     
     <section class="introduction">
         <h2>Introduction</h2>
-        <p>Welcome to my blog post about my school project on [Your Project Topic]. In this post, I'll share what I learned, the challenges I faced, and the outcomes of my project. This project was completed for [Teacher's Name]'s [Subject] class.</p>
+        <p>This DIY digital synthesizer and drum set project is perfect for any music enthusiast, 
+            hacker, or programmers who are interested in digital signal processing (DSP), modern music production, electronics and programming.
+            Use an Arduino and Rasperry PI Pico (optional) to create your own DJ deck, complete with a synthesizer, effects (attack, delay, sustain, release)
+            , keyboard and drums. Develop some applied practical skills and add your own twists following along with this project!
+        </p>
         
         <blockquote>
-            "The best projects are those that solve real problems and teach us something new along the way."
+            "The most exciting phrase to hear in science, the one that heralds new discoveries, is not 'Eureka!' but 'That's funny...'" - Isaac Asimov
         </blockquote>
+    </section>
+
+    <section class="required-materials">
+        <h2>What you'll need:</h2>
+        <p>Below is a table of the main parts you will need to create the basic elements of this project. Don't fret! If you do not have exactly resistors or capacitors, you can experiment with designing your own filters, etc.</p>
+        
+        <table class="components-table">
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Quantity</th>
+                    <th>Specifications</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Core Electronics -->
+                <tr class="section-header">
+                    <td colspan="4"><strong>Core Electronics</strong></td>
+                </tr>
+                <tr>
+                    <td>Arduino Nano 33 IOT</td>
+                    <td>1</td>
+                    <td>Or compatible microcontroller (Uno, etc.)</td>
+                    <td>Main processor for the synthesizer</td>
+                </tr>
+                <tr>
+                    <td>Raspberry PI Pico</td>
+                    <td>1</td>
+                    <td>Or compatible microcontroller</td>
+                    <td>Main processor for drums and GUI</td>
+                </tr>
+                <tr>
+                    <td>Breadboard</td>
+                    <td>1</td>
+                    <td>Full-size recommended, multiple may be helpful</td>
+                    <td>For prototyping the circuit</td>
+                </tr>
+                <tr>
+                    <td>Jumper Wires</td>
+                    <td>20+</td>
+                    <td>Various lengths, female connectors may be helpful</td>
+                    <td>Connecting components</td>
+                </tr>
+                
+                <!-- Keyboard/Input Section -->
+                <tr class="section-header">
+                    <td colspan="4"><strong>Keyboard/Input Components</strong></td>
+                </tr>
+                <tr>
+                    <td>Keypad</td>
+                    <td>1</td>
+                    <td>Alternatively use 8+ push buttons</td>
+                    <td>Keyboard keys</td>
+                </tr>
+                <tr>
+                    <td>Potentiometers</td>
+                    <td>6</td>
+                    <td>10kΩ linear</td>
+                    <td>Parameter controls for keyboard (attack, sustain, release, etc.)</td>
+                </tr>
+                <tr>
+                    <td>Pull-down Resistors</td>
+                    <td>8+</td>
+                    <td>10kΩ</td>
+                    <td>For button debouncing (only necessary if you use push-buttons rathe than keypad)</td>
+                </tr>
+                
+                <!-- Synthesizer/Sound Generation -->
+                <tr class="section-header">
+                    <td colspan="4"><strong>Synthesizer Components</strong></td>
+                </tr>
+                <tr>
+                    <td>Digital to Analogue Converter (DAC)</td>
+                    <td>1</td>
+                    <td><a href="https://ww1.microchip.com/downloads/en/DeviceDoc/22250A.pdf">MCP499</a> (12 bit DAC) or similar</td>
+                    <td>Signal generation</td>
+                </tr>
+                <tr>
+                    <td>Op-Amp</td>
+                    <td>1</td>
+                    <td><a href="https://www.analog.com/en/products/max417.html">MAX417</a> or similar</td>
+                    <td>DAC signal conditioning</td>
+                </tr>
+                
+                <tr>
+                    <td>Resistors</td>
+                    <td>2</td>
+                    <td>10kΩ</td>
+                    <td>For RC filter</td>
+                </tr>
+                <tr>
+                    <td>Capacitor</td>
+                    <td>1</td>
+                    <td>1μF</td>
+                    <td>For RC filter</td>
+                </tr>
+                
+                <!-- Output Section -->
+                <tr class="section-header">
+                    <td colspan="4"><strong>Output Components</strong></td>
+                </tr>
+                <tr>
+                    <td>Speaker</td>
+                    <td>1</td>
+                    <td>8Ω</td>
+                    <td>Audio output</td>
+                </tr>
+                <tr>
+                    <td>Audio Power Amplifier</td>
+                    <td>1</td>
+                    <td><a href= "https://www.ti.com/lit/ds/symlink/lm386.pdf">LM386N</a> or similar</td>
+                    <td>Amplify audio signal</td>
+                </tr>
+
+                <td>Resistors</td>
+                    <td>1</td>
+                    <td>10kΩ</td>
+                    <td>For power amp.</td>
+                </tr>
+                <td>Potentiometer</td>
+                    <td>1</td>
+                    <td>500kΩ</td>
+                    <td>For Volume control</td>
+                </tr>
+                <tr>
+                    <td>Capacitors</td>
+                    <td>2</td>
+                    <td>0.33μF, 220μF</td>
+                    <td>For power amp.</td>
+                </tr>
+                
+                <!-- GUI Components -->
+                <tr class="section-header">
+                    <td colspan="4"><strong>GUI Components</strong></td>
+                </tr>
+                <tr>
+                    <td>OLED SPI Display</td>
+                    <td>1</td>
+                    <td>Any display that uses  Adafruit SSD1306 drivers <a href= "https://midasdisplays.com/shop/oled/oled-graphic/mdob128064bv-ws/"> e.g. MDOB128064BV-WS</a></td> 
+                    <td>Display synthesizer parameters</td>
+                </tr>
+                <tr>
+                    <td>Joystick</td>
+                    <td>1</td>
+                    <td>With push button <a href= "https://cdn.velleman.eu/downloads/29/vma315_a4v01.pdf"> e.g. VMA315</a></td>
+                    <td>Menu navigation</td>
+                </tr>
+
+                <!-- Drum Section -->
+                <tr class="section-header">
+                    <td colspan="4"><strong>Drum Machine Components</strong></td>
+                </tr>
+                <tr>
+                    <td>Touch sensor</td>
+                    <td>4</td>
+                    <td>Capacitive touch sensor such as <a href= "https://wiki.dfrobot.com/DFRobot_Capacitive_Touch_Sensor_SKU_DFR0030">DFRobot v2</a></td>
+                    <td>Drum trigger pads</td>
+                </tr>
+            </tbody>
+        </table>
     </section>
     
     <section class="project-overview">
