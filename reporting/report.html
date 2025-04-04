@@ -349,6 +349,33 @@
         <p>The main goal of this project was to utilize an analogue component with an embedded component to create a system that functionally produces and processes audio signals for musical applications. Our system integrates the envelope components of the synthesizer with the touch pads of the drum set to create a model of a DJ set that allows for real-time sound creation and manipulation. This project demonstrates the use of practical applications in circuit design as well as developing and processing audio signals for output, combining analog signal conditioning with digital control systems.</p>
     </section>
 
+    <section class="Lesson 1: Play around with sound.">
+        <h2>Lesson 1: Play around with sound.</h2>
+        <p>Originally we set out to make a vocoder for this project, but after much testing and consideration we decided to 
+            pivot. Some of the elements we built however, remained useful. The first thing we built was an audio power amplifier, 
+            so that we could experiment with playing different sounds through it, and how different filters would affect the audio.
+            You can try connecting the <strong>green wire</strong> to different types of input and playing with the volume controls.
+
+            <object type="image/svg+xml" data="interactive_elems/power_amplifier.svg" class="project-image">
+                Your browser does not support SVG
+            </object>
+
+            <ul>
+                <li><strong>LM386 IC:</strong> This integrated circuit amplifies the weak audio signal to a level that can drive a speaker.</li>
+                
+                <li><strong>500kΩ Potentiometer:</strong> This serves as our volume control, allowing us to adjust the amount of audio signal that reaches the amplifier. Turning this knob adjusts the amplitude of the output sound.</li>
+                
+                <li><strong>0.33μF Capacitor (Input):</strong> This capacitor blocks DC voltage while allowing AC audio signals to pass through, preventing DC offset from affecting the amplifier.</li>
+                
+                <li><strong>220μF Capacitor (Output):</strong> This large electrolytic capacitor couples the amplified audio signal to the speaker while blocking DC current.</li>
+                
+                <li><strong>8Ω Speaker:</strong> The final component in our chain converts the electrical signal from the amplifier into sound waves we can hear. The 8Ω impedance matches well with the LM386's output characteristics.</li>
+            </ul>
+
+        
+        </p>
+    </section>
+
     <section class="How-Do-The-Components-Work?">
         <h2>How Do The Components Work?</h2>
         <img src="imgs/markup_keyb_synth.jpeg" alt="Featured image" class="featured-image">
