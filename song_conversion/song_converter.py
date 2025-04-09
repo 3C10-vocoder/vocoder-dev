@@ -1,146 +1,95 @@
 import numpy as np
 from scipy.io import wavfile
-import matplotlib.pyplot as plt
 
 def load_audio(file_path):
-    """
-    Load an audio file and return the sample rate and data.
-    """
-    sample_rate, audio_data = wavfile.read(file_path)
-    
-    # If stereo, convert to mono by averaging channels
-    if len(audio_data.shape) > 1:
-        audio_data = np.mean(audio_data, axis=1)
-    
-    return sample_rate, audio_data
+    """load audio file and return sample rate and data"""
+    sr, data = wavfile.read(file_path)
 
-def normalize_audio(audio_data, bit_depth=16):
-    """
-    Normalize audio data to the range appropriate for the given bit depth.
-    For DAC output, typically we want values between 0 and 2^bit_depth-1.
-    """
-    # Scale to 0-1 range
-    audio_normalized = (audio_data - np.min(audio_data)) / (np.max(audio_data) - np.min(audio_data))
-    
-    # Scale to appropriate range for bit depth
-    max_value = 2**bit_depth - 1
-    audio_scaled = np.round(audio_normalized * max_value).astype(np.uint16)
-    
-    return audio_scaled
-
-def resample_audio(audio_data, original_rate, target_rate):
-    """
-    Resample audio data to a different sampling rate.
-    """
-    # Calculate ratio of target rate to original rate
-    ratio = target_rate / original_rate
-    
-    # Calculate number of samples for the new rate
-    new_length = int(len(audio_data) * ratio)
-    
-    # Create indices for the new samples
-    indices = np.linspace(0, len(audio_data) - 1, new_length)
-    
-    # Use linear interpolation to resample
-    resampled_audio = np.interp(indices, np.arange(len(audio_data)), audio_data)
-    
-    return resampled_audio
-
-def save_to_file(audio_data, output_file, format_type="decimal"):
-    """
-    Save the processed audio data to a file in the specified format.
-    
-    format_type options:
-    - "decimal": Plain decimal values
-    - "hex": Hexadecimal values
-    - "binary": Binary values
-    - "csv": Comma-separated decimal values
-    """
-    with open(output_file, 'w') as f:
-        if format_type == "decimal":
-            for value in audio_data:
-                f.write(f"{value}\n")
-        elif format_type == "hex":
-            for value in audio_data:
-                f.write(f"0x{value:04X}\n")
-        elif format_type == "binary":
-            for value in audio_data:
-                f.write(f"{value:016b}\n")
-        elif format_type == "csv":
-            f.write(','.join(map(str, audio_data)))
+    # if wav is not in float form
+    if data.dtype != np.float64:
+        # if it is an integer
+        if np.issubdtype(data.dtype, np.integer):
+            # get info about the data
+            info = np.iinfo(data.dtype)
+            # convert to an array of float64 type normalized to 1
+            data = data.astype(np.float64) / max(abs(info.min), abs(info.max))
         else:
-            raise ValueError(f"Unsupported format type: {format_type}")
+            data = data.astype(np.float64)
+    # check for multi-channel
+    if len(data.shape) > 1:
+        data = np.mean(data, axis=1)
+    return sr, data
 
-def plot_audio(audio_data, sample_rate, title="Audio Waveform"):
-    """
-    Plot the audio data for visualization.
-    """
-    duration = len(audio_data) / sample_rate
-    time = np.linspace(0, duration, len(audio_data))
-    
-    plt.figure(figsize=(10, 6))
-    plt.plot(time, audio_data)
-    plt.title(title)
-    plt.xlabel("Time (s)")
-    plt.ylabel("Amplitude")
-    plt.grid(True)
-    plt.show()
+def normalize_audio_int16(data):
+    """normalize data to int16 range"""
+    # get the maximum data value to check if it has been correctly normalized
+    max_val = np.max(np.abs(data))
+    # if max_val > 1.0, normalize, otherwise data is assumed normalized
+    if max_val > 1.0:
+        norm = data / max_val  
+    else:
+        norm = data
+    # now scale the data to the int16_t datatype which is required for PWM output
+    scaled = norm * 32767.0
+    return np.round(scaled).astype(np.int16)
 
-def create_header_file(audio_data, output_file, array_name="audio_data"):
-    """
-    Create a C header file with the audio data as an array.
-    Useful for embedding audio in microcontroller applications.
-    """
-    with open(output_file, 'w') as f:
-        f.write(f"const unsigned short {array_name}[{len(audio_data)}] = {{\n    ")
-        
-        # Write 12 values per line
-        values_per_line = 12
-        for i in range(0, len(audio_data), values_per_line):
-            line_values = audio_data[i:i+values_per_line]
-            f.write(', '.join([f"{value}" for value in line_values]))
-            
-            if i + values_per_line < len(audio_data):
-                f.write(",\n    ")
+def resample_audio(data, orig_rate, target_rate):
+    """resample audio using linear interpolation"""
+    ratio = target_rate / orig_rate
+    # new vector length will be smaller than original
+    new_len = int(np.round(len(data) * ratio))
+    # generate the inices for resampling -> evenly spaced between 0 - len(data) - 1
+    indices = np.linspace(0, len(data) - 1, new_len)
+    orig_indices = np.arange(len(data))
+    # extract data from old indices of data at new indices
+    return np.interp(indices, orig_indices, data)
+
+def create_header_file(data, sr, out_file, array_name="audio_data"):
+    """create c header file with int16_t array of audio data"""
+    dur = len(data) / sr
+
+    with open(out_file, 'w') as f:
+        f.write(f"// audio data for: {array_name}\n")
+        f.write(f"// sample rate: {sr} hz\n")
+        f.write(f"// duration: {dur:.3f} seconds\n")
+        f.write(f"// length: {len(data)} samples\n\n")
+        f.write("#ifndef AUDIO_DATA_H_%s\n" % array_name.upper())
+        f.write("#define AUDIO_DATA_H_%s\n\n" % array_name.upper())
+        f.write("#include <stdint.h>\n")
+        f.write("#include <stddef.h>\n\n")
+        f.write(f"const size_t {array_name}_length = {len(data)};\n\n")
+        f.write(f"const int16_t {array_name}[{len(data)}] = {{\n    ")
+
+        vals_per_line = 12
+        for i, v in enumerate(data):
+            f.write(f"{v}")
+            if i < len(data) - 1:
+                f.write(",")
+                if (i + 1) % vals_per_line == 0:
+                    f.write("\n    ")
+                else:
+                    f.write (" ")
             else:
-                f.write("\n};\n\n")
-                
-        f.write(f"const unsigned int {array_name}_length = {len(audio_data)};\n")
-        f.write(f"// Original sample rate: {sample_rate} Hz\n")
+                f.write("\n")
+
+        f.write("};\n\n")
+        f.write("#endif // AUDIO_DATA_H_%s\n" % array_name.upper())
 
 if __name__ == "__main__":
-    # Input parameters
-    input_file = "kleber_piano_loop.wav"  # Path to your audio file
-    output_file = "kleber_piano_loop.txt"  # Output file for raw values
-    header_file = "audio_data.h"    # Output header file for C/C++
-    target_sample_rate = 44100      # Target sampling rate in Hz
-    bit_depth = 12                  # Bit depth for DAC (common values: 8, 10, 12, 16)
-    
-    # Load audio file
-    sample_rate, audio_data = load_audio(input_file)
-    print(f"Original sample rate: {sample_rate} Hz")
-    print(f"Original audio length: {len(audio_data)} samples")
-    
-    # Resample if needed
-    if target_sample_rate != sample_rate:
-        audio_data = resample_audio(audio_data, sample_rate, target_sample_rate)
-        sample_rate = target_sample_rate
-        print(f"Resampled to: {sample_rate} Hz")
-        print(f"New audio length: {len(audio_data)} samples")
-    
-    # Normalize and scale for DAC
-    dac_values = normalize_audio(audio_data, bit_depth)
-    
-    # Plot the processed audio
-    plot_audio(dac_values, sample_rate, title=f"Audio Waveform (Normalized to {bit_depth}-bit)")
-    
-    # Save the values to a text file
-    save_to_file(dac_values, output_file, format_type="decimal")
-    print(f"Saved {len(dac_values)} DAC values to {output_file}")
-    
-    # Create a C header file
-    create_header_file(dac_values, header_file)
-    print(f"Created C header file: {header_file}")
-    
-    print("\nSample output values:")
-    print(dac_values[:10])  # Print first 10 values
+    wav_file = "blk_enter_dragon.wav"
+    header_file = "blk_enter_dragon.h"
+    array_name = "blk_enter_dragon_audio"
+    target_sr = 22050
+    max_duration = 4.0  # seconds
+
+    orig_sr, audio = load_audio(wav_file)
+    # shorten audio array to 4 seconds
+    audio = audio[:int(max_duration * orig_sr)]
+
+    # sample the new audio file at that bit width
+    if target_sr != orig_sr:
+        audio = resample_audio(audio, orig_sr, target_sr)
+        orig_sr = target_sr
+
+    audio_int16 = normalize_audio_int16(audio)
+    create_header_file(audio_int16, orig_sr, header_file, array_name)
