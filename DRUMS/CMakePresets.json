@@ -9,10 +9,10 @@
         "binaryDir": "${sourceDir}/build",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Debug",
-          "PICO_SDK_PATH": "C:\\Users\\doran\\Documents\\pico-sdk"
+          "PICO_SDK_PATH": "C:\\Users\\ruair\\.pico-sdk\\sdk\\2.1.0"
         },
         "environment": {
-          "PICO_SDK_PATH": "C:\\Users\\doran\\Documents\\pico-sdk"
+          "PICO_SDK_PATH": "C:\\Users\\ruair\\.pico-sdk\\sdk\\2.1.0"
         }
       }
     ],

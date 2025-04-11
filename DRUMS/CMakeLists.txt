@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
+set(PICO_SDK_PATH "C:/Users/ruair/.pico-sdk/sdk/2.1.0")
 
 # Initialize the SDK
 include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
@@ -12,8 +13,10 @@ pico_sdk_init()
 
 # Add executable
 add_executable(dma_audio
-    main.c
+    main.cpp
 )
+
+add_subdirectory(pico-ssd1306)
 
 # Enable USB serial output, disable UART output
 pico_enable_stdio_usb(dma_audio 1)
@@ -27,6 +30,9 @@ target_link_libraries(dma_audio
     hardware_pio
     hardware_gpio
     hardware_spi  # Added SPI library for MCP4922 DAC
+    hardware_adc
+    pico_ssd1306
+    hardware_i2c
 )
 
 # Create map/bin/hex/uf2 file etc.

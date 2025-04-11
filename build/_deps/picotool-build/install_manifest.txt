@@ -1,0 +1,5 @@
+C:/Users/ruair/Documents/vocoder/vocoder-dev/build/_deps/picotool/picotool.exe
+C:/Users/ruair/Documents/vocoder/vocoder-dev/build/_deps/picotool/picotoolTargets.cmake
+C:/Users/ruair/Documents/vocoder/vocoder-dev/build/_deps/picotool/picotoolTargets-debug.cmake
+C:/Users/ruair/Documents/vocoder/vocoder-dev/build/_deps/picotool/picotoolConfig.cmake
+C:/Users/ruair/Documents/vocoder/vocoder-dev/build/_deps/picotool/picotoolConfigVersion.cmake
