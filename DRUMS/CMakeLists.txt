@@ -26,7 +26,8 @@ target_link_libraries(dma_audio
     hardware_pwm
     hardware_pio
     hardware_gpio
-    hardware_spi  # Added SPI library for MCP4922 DAC
+    hardware_spi  # Added SPI library for MCP4922 DAC, we can acc remove this
+    hardware_adc
 )
 
 # Create map/bin/hex/uf2 file etc.
